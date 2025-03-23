@@ -1,0 +1,63 @@
+{
+  "name": "react-rv",
+  "version": "0.1.0",
+  "description": "react-rv is a lightweight and efficient state management library for React that allows you to create reactive variables and subscribe to them with minimal overhead.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "spec": "pnpm exec vitest run --typecheck",
+    "coverage": "pnpm exec vitest run --typecheck --coverage",
+    "lint:check": "pnpm exec eslint .",
+    "type:check": "pnpm exec tsc --build --noEmit",
+    "build": "pnpm exec tsup"
+  },
+  "keywords": [
+    "react",
+    "reactive",
+    "state",
+    "state manager",
+    "reactive state",
+    "rv"
+  ],
+  "author": "rasulomaroff",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rasulomaroff/react-rv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rasulomaroff/react-rv/issues"
+  },
+  "homepage": "https://github.com/rasulomaroff/react-rv#readme",
+  "packageManager": "pnpm@10.5.2",
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.2.0",
+    "@types/react": "^19.0.10",
+    "@types/use-sync-external-store": "^0.0.6",
+    "@vitest/coverage-v8": "3.0.8",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^16.0.0",
+    "happy-dom": "^17.4.4",
+    "prettier": "^3.5.3",
+    "react": "^19.0.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1",
+    "vitest": "^3.0.8"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "dependencies": {
+    "use-sync-external-store": "^1.4.0"
+  }
+}
