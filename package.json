@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/rasulomaroff/react-rv/issues"
   },
-  "homepage": "https://github.com/rasulomaroff/react-rv#readme",
+  "homepage": "https://rasulomaroff.github.io/react-rv/",
   "packageManager": "pnpm@10.5.2",
   "devDependencies": {
     "@eslint/js": "^9.22.0",
