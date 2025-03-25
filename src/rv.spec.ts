@@ -52,6 +52,18 @@ describe('rv function', () => {
         expect(listener).toHaveBeenCalledExactlyOnceWith(3)
     })
 
+    it('allows to pass the default listener', () => {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        const listener = vi.fn(() => {})
+
+        const val = rv(2, { on: listener })
+
+        val.on(listener)
+
+        val(3)
+        expect(listener).toHaveBeenCalledExactlyOnceWith(3)
+    })
+
     it('does not call listeners if value does not change', () => {
         const val = rv(2)
         const listener = vi.fn()
@@ -72,5 +84,11 @@ describe('rv function', () => {
 
         val(3)
         expect(listener).not.toHaveBeenCalled()
+    })
+
+    it('allows to initiate value with a function', () => {
+        const val = rv.fn(() => 30)
+
+        expect(val()).toBe(30)
     })
 })

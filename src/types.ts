@@ -7,7 +7,7 @@
 export type Listener<T> = (val: T) => void
 
 /**
- * A function that cleans up event listeners.
+ * A function that cleans up event listener.
  */
 export type CleanupFn = () => void
 
@@ -27,13 +27,13 @@ export type EqualFn<T> = (oldValue: T, newValue: T) => boolean
  *
  * @template T The type of the reactive variable's value.
  */
-export type RvOptions<T> = Partial<{
+export type RvOptions<T> = {
     /**
      * Custom equality function to determine if the value should update.
      * If set to `false`, the default equality function will be used.
      */
-    eq: false | EqualFn<T>
-}>
+    eq?: false | EqualFn<T>
+}
 
 /**
  * A reactive variable (RV) function that allows getting, setting, and subscribing to changes.
@@ -64,4 +64,49 @@ export interface Rv<T> {
      * @returns A cleanup function to remove the listener.
      */
     on(listener: Listener<T>): CleanupFn
+}
+
+/**
+ * Configuration options for initializing a reactive variable.
+ *
+ * @template T The type of the reactive variable's value.
+ */
+export type RvInitOptions<T> = {
+    /**
+     * Custom equality function to determine if the value should update.
+     */
+    eq?: EqualFn<T>
+    /**
+     * A callback function triggered whenever the reactive variable is updated.
+     *
+     * @param val The new value of the reactive variable.
+     */
+    on?: (val: T) => void
+}
+
+/**
+ * A factory function for creating reactive variables.
+ */
+export interface RvInit {
+    /**
+     * Creates a reactive variable (RV), allowing value retrieval, updates, and subscriptions.
+     *
+     * @template T The type of the stored value.
+     * @param val The initial value of the reactive variable.
+     * @param options Optional configuration for the reactive variable.
+     *
+     * @returns A reactive variable function that allows getting, setting, and listening for updates.
+     */
+    <T>(val: T, options?: RvInitOptions<T>): Rv<T>
+    /**
+     * Creates a reactive variable from an initializer function.
+     * The function is immediately executed to determine the initial value.
+     *
+     * @template T The type of the stored value.
+     * @param init A function that returns the initial value.
+     * @param options Optional configuration for equality comparison and event listeners.
+     *
+     * @returns A reactive variable function.
+     */
+    fn<T>(init: () => T, options?: RvInitOptions<T>): Rv<T>
 }

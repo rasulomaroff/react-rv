@@ -11,5 +11,23 @@ import type { Rv } from './types'
  * @param rv The reactive variable to subscribe to.
  *
  * @returns The current value of the reactive variable.
+ *
+ * @example
+ * ```tsx
+ * import React from 'react'
+ * import { rv, useRv } from 'react-rv'
+ *
+ * const counter = rv(0)
+ *
+ * const Counter = () => {
+ *     const value = useRv(counter)
+ *     return (
+ *         <div>
+ *             <p>Count: {value}</p>
+ *             <button onClick={() => counter(value + 1)}>Increment</button>
+ *         </div>
+ *     )
+ * }
+ * ```
  */
 export const useRv = <T>(rv: Rv<T>): T => useSyncExternalStore(rv.on, rv, rv)

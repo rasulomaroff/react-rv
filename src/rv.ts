@@ -1,7 +1,4 @@
-import type { CleanupFn, EqualFn, Listener, Rv, RvOptions } from './types'
-
-/** guard for type-safety */
-const isEmpty = (val: unknown[]): val is [] => val.length === 0
+import type { CleanupFn, EqualFn, Listener, Rv, RvInitOptions, RvOptions } from './types'
 
 const defaultEq = <T>(oldValue: T, newValue: T): boolean => oldValue === newValue
 
@@ -13,14 +10,57 @@ const defaultEq = <T>(oldValue: T, newValue: T): boolean => oldValue === newValu
  * @param options Optional configuration for the reactive variable.
  *
  * @returns A reactive variable function that allows getting, setting, and listening for updates.
+ *
+ * @example
+ * ```ts
+ * // initialize a state variable with initial value set to 0
+ * const positiveVar = rv(0, {
+ *     // all options are optional
+ *
+ *     // define custom `eq` function that will be run on every value set to determine
+ *     // whether or not value is going to be updated
+ *     eq: (oldValue, newValue) => newValue > oldValue && newValue >= 0,
+ *
+ *     // define callback that's going to be run on every change
+ *     on: val => {}
+ * })
+ *
+ * // alternatively, there's a handy function initializer
+ * // all options are identical
+ * const positiveVar = rv.fn(() => 0)
+ *
+ * // call variable function with no arguments to get its current value
+ * const currentValue = positiveVar()
+ *
+ * // call variable function passing an argument in order to set it
+ * // Won't trigger an update because the values are "equal" under this custom rule.
+ * positiveVar(-3, {
+ *     // override the initial `eq` function for this update call.
+ *     eq: (oldValue, newValue) => newValue > oldValue
+ *     // additionally, you can disable initial `eq` function by passing `false` here
+ *     // it will use a default `eq` function which is just a strict check: `===`
+ *     eq: false // in this case, update WILL happen
+ * })
+ *
+ * // you can also subscribe to value without using any hooks
+ * const unsubscribe = positiveVar.on(newValue => console.log(newValue))
+ *
+ * positiveVar(4) // logs: 4
+ *
+ * unsubscribe()
+ *
+ * positiveVar(5) // there will be no logs
+ * ```
  */
-export function rv<T>(val: T, options?: Partial<{ eq: EqualFn<T> }>): Rv<T> {
-    const { eq = defaultEq } = options ?? {}
+export function rv<T>(val: T, options?: RvInitOptions<T>): Rv<T> {
+    const { eq = defaultEq, on } = options ?? <RvInitOptions<T>>{}
 
     const listeners = new Set<Listener<T>>()
 
+    if (on) listeners.add(on)
+
     const fn: Rv<T> = (...args: [] | [newValue: T, options?: RvOptions<T>]): T => {
-        if (isEmpty(args)) return val
+        if (args.length === 0) return val
 
         const [newValue, options] = args
 
@@ -49,3 +89,16 @@ export function rv<T>(val: T, options?: Partial<{ eq: EqualFn<T> }>): Rv<T> {
 
     return fn
 }
+
+/**
+ * Creates a reactive variable from an initializer function.
+ * The function is immediately executed to determine the initial value.
+ *
+ * @template T The type of the stored value.
+ * @param init A function that returns the initial value.
+ * @param options Optional configuration for equality comparison and event listeners.
+ *
+ * @returns A reactive variable function.
+ */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+rv.fn = <T>(init: () => T, options?: RvInitOptions<T>) => rv(init(), options)

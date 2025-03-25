@@ -1,6 +1,6 @@
 {
   "name": "react-rv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "react-rv is a lightweight and efficient state management library for React that allows you to create reactive variables and subscribe to them with minimal overhead.",
   "files": [
     "dist"
@@ -15,6 +15,7 @@
   "scripts": {
     "spec": "pnpm exec vitest run --typecheck",
     "coverage": "pnpm exec vitest run --typecheck --coverage",
+    "doc": "pnpm exec typedoc ./src/index.ts",
     "lint:check": "pnpm exec eslint .",
     "type:check": "pnpm exec tsc --build --noEmit",
     "build": "pnpm exec tsup"
@@ -53,6 +54,7 @@
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "tsup": "^8.4.0",
+    "typedoc": "^0.28.1",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"

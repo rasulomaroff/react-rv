@@ -31,70 +31,51 @@ pnpm add react-rv
 yarn add react-rv
 ```
 
-## API and Usage
+## Examples
 
-### `rv<T>(initialValue: T, options?: RvOptions<T>): Rv<T>`
-
-Creates a new reactive variable.
-
-#### Usage:
-```ts
-const state = rv(0)
-// calling variable with no arguments will return its current value
-console.log(state()) // 0
-// calling variable with an argument will set its value to this argument
-state(10)
-console.log(state()) // 10
-```
-
-#### Options:
-
-```ts
-const state = rv(0, { eq: (oldValue, newValue) => Math.abs(oldValue - newValue) < 0.01 })
-state(0.005) // Won't trigger an update because the values are "equal" under this custom rule.
-state(0.005, {
-    // you can disable initial `eq` function by pasing false here
-    // it will use a default `eq` function which is just a strict check: `===`
-    // in this case, update WILL happen
-    eq: false
-})
-state(0.005, {
-    // you can override initial `eq` function by passing another one just for this update call
-    eq: (oldValue, newValue): boolean => false
-})
-```
-
-### `rv.on(listener: (value: T) => void): CleanupFn`
-
-Subscribes to changes of the reactive variable.
-
-#### Usage:
-
-```ts
-const state = rv(0)
-const unsubscribe = state.on(value => console.log('New value:', value))
-state(1) // Logs: New value: 1
-unsubscribe()
-state(2) // No logs
-```
-
-### `useRv<T>(rv: Rv<T>): T`
-
-Subscribes to changes of the reactive variable inside a react component and updates it when the state is updated.
+- Simple boolean flag
 
 ```tsx
-import React from 'react'
-import { rv, useRv } from 'react-rv'
+const isOnlineVar = rv(true)
 
-const counter = rv(0)
+const toggleStatus = () => isOnlineVar(!isOnlineVar())
 
-const Counter = () => {
-    const value = useRv(counter)
+const App = () => {
+    const isOnline = useRv(isOnlineVar)
+
     return (
         <div>
-            <p>Count: {value}</p>
-            <button onClick={() => counter(value + 1)}>Increment</button>
+            <h1>{isOnline ? 'You are online' : 'You are offline'}</h1>
+            <button onClick={toggleStatus}>Toggle Status</button>
         </div>
+    )
+}
+```
+
+- Syncing with a variable in local storage
+
+```tsx
+const darkThemeVar = rv.fn(
+    () => {
+        try {
+            return JSON.parse(localStorage.getItem('darkTheme'))
+        } catch {
+            return false
+        }
+    },
+    { on: val => localStorage.setItem('darkTheme', val) },
+)
+
+const toggleTheme = () => darkThemeVar(!darkThemeVar())
+
+const Component = () => {
+    const isDarkTheme = useRv(darkTheme)
+
+    return (
+      <>
+          {isDarkTheme ? <...> : <...>}
+          <button onClick={toggleTheme}>Toggle</button>
+      </>
     )
 }
 ```
@@ -171,7 +152,7 @@ const Counter = () => {
     // whenever `countVar` value is updated, this hook will re-render this component
     const count = useRv(countVar)
 
-    return <button onClick={increment}>Count: {count}</button>;
+    return <button onClick={increment}>Count: {count}</button>
 }
 ```
 
