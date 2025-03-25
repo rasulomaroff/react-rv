@@ -1,9 +1,6 @@
 name: Deploy docs
 
 on:
-  push:
-    branches: ["master"]
-
   workflow_dispatch:
 
 permissions:
