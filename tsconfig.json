@@ -28,9 +28,13 @@
     "strictFunctionTypes": true,
     "skipLibCheck": true
   },
-  "excclude": [
+  "exclude": [
     "node_modules",
     "dist",
-    "docs"
+    "docs",
+    "coverage"
+  ],
+  "include": [
+    "**/*.ts"
   ]
 }

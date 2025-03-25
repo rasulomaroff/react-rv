@@ -1,28 +1,14 @@
-// @ts-check
-
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import globals from 'globals'
 import prettier from 'eslint-plugin-prettier/recommended'
 
-export default tseslint.config(
+export default [
     eslint.configs.recommended,
-    tseslint.configs.recommendedTypeChecked,
+    ...tseslint.configs.recommendedTypeChecked,
 
-    {
-        languageOptions: {
-            globals: globals.browser,
-            parserOptions: {
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
-            },
-        },
-    },
-    {
-        files: ['**/*.js'],
-        ...tseslint.configs.disableTypeChecked,
-    },
-    tseslint.configs.stylisticTypeChecked,
+    { ignores: ['**/dist/**/*', '**/coverage/**', '**/node_modules/**', '**/docs/**'] },
+
     {
         rules: {
             '@typescript-eslint/explicit-function-return-type': 'error',
@@ -31,5 +17,14 @@ export default tseslint.config(
             '@typescript-eslint/unbound-method': 'off',
         },
     },
+    {
+        languageOptions: {
+            globals: globals.browser,
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: '.',
+            },
+        },
+    },
     prettier,
-)
+]

@@ -53,7 +53,6 @@ describe('rv function', () => {
     })
 
     it('allows to pass the default listener', () => {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         const listener = vi.fn(() => {})
 
         const val = rv(2, { on: listener })
