@@ -1,6 +1,6 @@
 {
   "name": "react-rv",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "react-rv is a lightweight and efficient state management library for React that allows you to create reactive variables and subscribe to them with minimal overhead.",
   "files": [
     "dist"
@@ -8,8 +8,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
       "node": "./dist/index.cjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
   },
