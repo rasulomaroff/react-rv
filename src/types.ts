@@ -2,9 +2,11 @@
  * A function that listens to reactive variable updates.
  *
  * @template T The type of the value being listened to.
+ *
  * @param val The updated value of the reactive variable.
+ * @param old The old value of the reactive variable.
  */
-export type Listener<T> = (val: T) => void
+export type Listener<T> = (val: T, old: T) => void
 
 /**
  * A function that cleans up event listener.
@@ -15,6 +17,7 @@ export type CleanupFn = () => void
  * A function to compare old and new values for equality.
  *
  * @template T The type of values being compared.
+ *
  * @param oldValue The previous value.
  * @param newValue The new value to compare against.
  *
@@ -81,7 +84,7 @@ export type RvInitOptions<T> = {
      *
      * @param val The new value of the reactive variable.
      */
-    on?: (val: T) => void
+    on?: Listener<T>
 }
 
 /**
@@ -92,6 +95,7 @@ export interface RvInit {
      * Creates a reactive variable (RV), allowing value retrieval, updates, and subscriptions.
      *
      * @template T The type of the stored value.
+     *
      * @param val The initial value of the reactive variable.
      * @param options Optional configuration for the reactive variable.
      *
@@ -103,6 +107,7 @@ export interface RvInit {
      * The function is immediately executed to determine the initial value.
      *
      * @template T The type of the stored value.
+     *
      * @param init A function that returns the initial value.
      * @param options Optional configuration for equality comparison and event listeners.
      *

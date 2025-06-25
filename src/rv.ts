@@ -6,6 +6,7 @@ const defaultEq = <T>(oldValue: T, newValue: T): boolean => oldValue === newValu
  * Creates a reactive variable (RV), allowing value retrieval, updates, and subscriptions.
  *
  * @template T The type of the stored value.
+ *
  * @param val The initial value of the reactive variable.
  * @param options Optional configuration for the reactive variable.
  *
@@ -22,7 +23,7 @@ const defaultEq = <T>(oldValue: T, newValue: T): boolean => oldValue === newValu
  *     eq: (oldValue, newValue) => newValue > oldValue && newValue >= 0,
  *
  *     // define callback that's going to be run on every change
- *     on: val => {}
+ *     on: (newValue, oldValue) => {}
  * })
  *
  * // alternatively, there's a handy function initializer
@@ -43,7 +44,7 @@ const defaultEq = <T>(oldValue: T, newValue: T): boolean => oldValue === newValu
  * })
  *
  * // you can also subscribe to value without using any hooks
- * const unsubscribe = positiveVar.on(newValue => console.log(newValue))
+ * const unsubscribe = positiveVar.on((newValue, oldValue) => console.log(newValue, oldValue))
  *
  * positiveVar(4) // logs: 4
  *
@@ -72,9 +73,10 @@ export function rv<T>(val: T, options?: RvInitOptions<T>): Rv<T> {
 
         if (eqfn(val, newValue)) return val
 
+        const oldValue = val
         val = newValue
 
-        listeners.forEach(cb => cb(newValue))
+        listeners.forEach(cb => cb(newValue, oldValue))
 
         return val
     }

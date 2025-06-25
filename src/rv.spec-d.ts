@@ -27,13 +27,15 @@ describe('rv function', () => {
 
     it('infers variable type in a subscription parameter', () => {
         const val = rv(2, {
-            on: v => {
+            on: (v, o) => {
                 expectTypeOf(v).toBeNumber()
+                expectTypeOf(o).toBeNumber()
             },
         })
 
-        val.on(v => {
+        val.on((v, o) => {
             expectTypeOf(v).toBeNumber()
+            expectTypeOf(o).toBeNumber()
         })
     })
 
@@ -63,13 +65,15 @@ describe('rv function', () => {
 
     it('infers variable type in a subscription parameter', () => {
         const val = rv.fn(() => 3, {
-            on: v => {
+            on: (v, o) => {
                 expectTypeOf(v).toBeNumber()
+                expectTypeOf(o).toBeNumber()
             },
         })
 
-        val.on(v => {
+        val.on((v, o) => {
             expectTypeOf(v).toBeNumber()
+            expectTypeOf(o).toBeNumber()
         })
     })
 

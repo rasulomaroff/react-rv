@@ -49,7 +49,7 @@ describe('rv function', () => {
         val.on(listener)
 
         val(3)
-        expect(listener).toHaveBeenCalledExactlyOnceWith(3)
+        expect(listener).toHaveBeenCalledExactlyOnceWith(3, 2)
     })
 
     it('allows to pass the default listener', () => {
@@ -60,7 +60,7 @@ describe('rv function', () => {
         val.on(listener)
 
         val(3)
-        expect(listener).toHaveBeenCalledExactlyOnceWith(3)
+        expect(listener).toHaveBeenCalledExactlyOnceWith(3, 2)
     })
 
     it('does not call listeners if value does not change', () => {
