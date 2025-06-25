@@ -63,7 +63,7 @@ const darkThemeVar = rv.fn(
             return false
         }
     },
-    { on: val => localStorage.setItem('darkTheme', val) },
+    { on: (newValue, oldValue) => localStorage.setItem('darkTheme', newValue) },
 )
 
 const toggleTheme = () => darkThemeVar(!darkThemeVar())
