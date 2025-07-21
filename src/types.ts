@@ -66,7 +66,19 @@ export interface Rv<T> {
      *
      * @returns A cleanup function to remove the listener.
      */
-    on(listener: Listener<T>): CleanupFn
+    on: (listener: Listener<T>) => CleanupFn
+    /**
+     * Unsubscribes a listener from value changes.
+     *
+     * @param listener A callback function that is needed to be unsubscribed.
+     */
+    off: (listener: Listener<T>) => void
+    /**
+     * Returns the number of listeners for this reactive variable.
+     *
+     * @returns listener count.
+     */
+    size: () => number
 }
 
 /**
@@ -113,5 +125,5 @@ export interface RvInit {
      *
      * @returns A reactive variable function.
      */
-    fn<T>(init: () => T, options?: RvInitOptions<T>): Rv<T>
+    fn: <T>(init: () => T, options?: RvInitOptions<T>) => Rv<T>
 }

@@ -8,7 +8,7 @@ const defaultEq = <T>(oldValue: T, newValue: T): boolean => oldValue === newValu
  * @template T The type of the stored value.
  *
  * @param val The initial value of the reactive variable.
- * @param options Optional configuration for the reactive variable.
+ * @param opts Optional configuration for the reactive variable.
  *
  * @returns A reactive variable function that allows getting, setting, and listening for updates.
  *
@@ -53,22 +53,22 @@ const defaultEq = <T>(oldValue: T, newValue: T): boolean => oldValue === newValu
  * positiveVar(5) // there will be no logs
  * ```
  */
-export function rv<T>(val: T, options?: RvInitOptions<T>): Rv<T> {
-    const { eq = defaultEq, on } = options ?? <RvInitOptions<T>>{}
+export function rv<T>(val: T, opts?: RvInitOptions<T>): Rv<T> {
+    const { eq = defaultEq, on } = opts ?? <RvInitOptions<T>>{}
 
     const listeners = new Set<Listener<T>>()
 
     if (on) listeners.add(on)
 
-    const fn: Rv<T> = (...args: [] | [newValue: T, options?: RvOptions<T>]): T => {
+    const fn: Rv<T> = (...args: [] | [newValue: T, opts?: RvOptions<T>]): T => {
         if (args.length === 0) return val
 
-        const [newValue, options] = args
+        const [newValue, opts] = args
 
         let eqfn: EqualFn<T> = eq
 
-        if (typeof options?.eq !== 'undefined') {
-            eqfn = options.eq === false ? defaultEq : options.eq
+        if (typeof opts?.eq !== 'undefined') {
+            eqfn = opts.eq === false ? defaultEq : opts.eq
         }
 
         if (eqfn(val, newValue)) return val
@@ -80,6 +80,9 @@ export function rv<T>(val: T, options?: RvInitOptions<T>): Rv<T> {
 
         return val
     }
+
+    fn.off = (f): void => void listeners.delete(f)
+    fn.size = (): number => listeners.size
 
     fn.on = (listener): CleanupFn => {
         listeners.add(listener)
@@ -97,6 +100,7 @@ export function rv<T>(val: T, options?: RvInitOptions<T>): Rv<T> {
  * The function is immediately executed to determine the initial value.
  *
  * @template T The type of the stored value.
+ *
  * @param init A function that returns the initial value.
  * @param options Optional configuration for equality comparison and event listeners.
  *

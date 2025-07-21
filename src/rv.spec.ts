@@ -90,4 +90,37 @@ describe('rv function', () => {
 
         expect(val()).toBe(30)
     })
+
+    describe('size method', () => {
+        it('returns 0 if there is no listeners', () => {
+            const counter = rv(33)
+            expect(counter.size()).toBe(0)
+        })
+
+        it('returns number of listeners', () => {
+            const counter = rv(33)
+            counter.on(() => {})
+            counter.on(() => {})
+            expect(counter.size()).toBe(2)
+        })
+
+        it('correctly recognizes unsubscribes', () => {
+            const counter = rv(33)
+
+            const unsub1 = counter.on(() => {})
+            const unsub2 = counter.on(() => {})
+
+            expect(counter.size()).toBe(2)
+
+            unsub1()
+            expect(counter.size()).toBe(1)
+
+            unsub1()
+            // still one, because we've already unsubscribed from this function
+            expect(counter.size()).toBe(1)
+
+            unsub2()
+            expect(counter.size()).toBe(0)
+        })
+    })
 })
