@@ -15,6 +15,7 @@ export default [
             '@typescript-eslint/consistent-type-definitions': 'off',
             '@typescript-eslint/consistent-type-assertions': 'off',
             '@typescript-eslint/unbound-method': 'off',
+            '@typescript-eslint/no-namespace': 'off',
         },
     },
     {

@@ -9,6 +9,7 @@ react-rv is a lightweight and efficient state management library for React that 
 - **Efficient**: Only re-renders components that are subscribed to reactive variables.
 - **Flexible**: Works inside and outside React components.
 - **Custom equality checks**: Define your own comparison logic to avoid redundant updates.
+- **Stateless update subscriptions**: If you only need to read state updates without updating your component.
 - **TypeScript Support**: Fully typed for better developer experience.
 
 ##  Installation
@@ -80,6 +81,27 @@ const Component = () => {
 }
 ```
 
+- Listening to a state change without updating current component
+
+```tsx
+const Component = () => {
+    // the callback is going to be called when a variable changes,
+    // but this component won't be rerendered
+    useRvEffect(darkTheme, isEnabled => {
+        console.log(isEnabled)
+    })
+
+    return ...
+}
+```
+
+- Infer the type of the reactive variable
+
+```ts
+const darkTheme = rv(false)
+type DarkTheme = rv.infer<typeof darkTheme> // boolean
+```
+
 ## Why `react-rv` Over React Context?
 
 - **More granual state splitting**: React Context would require to create a separate context for every piece of state you'd use, which would also force you to wrap the app with providers for each react context.
@@ -87,6 +109,7 @@ If you don't do that and decide to create one big state, it would involve unnece
 - **Simpler API**: No need for providers, reducers, or complex state logic.
 - **No need for state setters**: The variable that's returned by `rv()` function is already a getter/setter itself.
 - **Usage outside React component tree**: Since the variable itself is a setter as well, you can use it outside react component tree. For example in your util functions that's defined outside react components.
+- **State listeners**: Allows you to listen to state changes without rerendering a current component. Useful for side-effects.
 
 #### React Context example
 

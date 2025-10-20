@@ -108,3 +108,18 @@ export function rv<T>(val: T, opts?: RvInitOptions<T>): Rv<T> {
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 rv.fn = <T>(init: () => T, options?: RvInitOptions<T>) => rv(init(), options)
+
+export namespace rv {
+    /**
+     * Infers the type of the reactive variable.
+     *
+     * @example
+     * ```ts
+     * const darkMode = rv(false)
+     *
+     * type DarkMode = rv.infer<typeof darkMode> // infers as boolean
+     * ```
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    export type infer<T extends Rv<any>> = T extends Rv<infer X> ? X : never
+}

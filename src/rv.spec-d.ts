@@ -157,3 +157,34 @@ describe('rv function', () => {
         val(3)
     })
 })
+
+describe('rv.infer method', () => {
+    it('infers a primitive type of rv', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const num = rv(3)
+
+        type Inferred = rv.infer<typeof num>
+
+        expectTypeOf<Inferred>().toBeNumber()
+    })
+
+    it('infers a complex type of rv', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const obj = rv({ name: '', age: 0, data: {} })
+
+        type Inferred = rv.infer<typeof obj>
+
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        expectTypeOf<Inferred>().toMatchObjectType<{ name: string; age: number; data: {} }>()
+    })
+
+    it('infers as never and throws a type error if it is not a reactive variable', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const justNumber = 30
+
+        // @ts-expect-error should throw an error since it's not a reactive variable
+        type Inferred = rv.infer<typeof justNumber>
+
+        expectTypeOf<Inferred>().toBeNever()
+    })
+})

@@ -52,6 +52,17 @@ describe('rv function', () => {
         expect(listener).toHaveBeenCalledExactlyOnceWith(3, 2)
     })
 
+    it('unsubscribes a listener', () => {
+        const val = rv(2)
+        const listener = vi.fn()
+
+        val.on(listener)
+        val.off(listener)
+
+        val(3)
+        expect(listener).not.toHaveBeenCalled()
+    })
+
     it('allows to pass the default listener', () => {
         const listener = vi.fn(() => {})
 
